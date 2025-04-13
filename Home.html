@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Daihatsu Solo</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+        background-color: white;
+        color: black;
+        border-bottom: 2px solid #ddd;
+      }
+
+      .logo img {
+        height: 40px;
+      }
+
+      .nav ul {
+        list-style: none;
+        display: flex;
+        gap: 20px;
+        position: relative;
+      }
+
+      .nav ul li {
+        position: relative;
+      }
+
+      .nav ul li a {
+        color: black;
+        text-decoration: none;
+        font-size: 14px;
+        padding: 10px 15px;
+        border-radius: 20px;
+        transition: background-color 0.3s, color 0.3s;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .nav ul li a:hover {
+        background: linear-gradient(to right, #c1272d, #b70000);
+        color: white;
+      }
+
+      .has-dropdown::after {
+        content: "▼";
+        font-size: 10px;
+        color: black;
+        transition: transform 0.3s;
+      }
+
+      .nav ul li a:hover.has-dropdown::after {
+        color: white;
+      }
+
+      .dropdown {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background: white;
+        padding: 15px;
+        border-radius: 15px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        z-index: 10;
+        min-width: 180px;
+      }
+
+      .dropdown a {
+        display: block;
+        color: black;
+        padding: 8px 0;
+        text-decoration: none;
+      }
+
+      .dropdown a:hover {
+        color: #c1272d;
+      }
+
+      .show {
+        display: block;
+      }
+
+      .banner {
+        width: 100%;
+        height: 400px;
+        background: url("source_photo/daihatsu-ayla-banner-2023\ \(1\).jpg") no-repeat center
+          center/cover;
+      }
+
+      .gallery {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        background-color: #ab1e23;
+        padding: 40px 20px 20px;
+        flex-wrap: wrap;
+      }
+
+      .card {
+        border-radius: 20px;
+        overflow: hidden;
+        width: 250px;
+        height: 150px;
+      }
+
+      .card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 20px;
+      }
+
+      .image-wrapper {
+        position: relative;
+        width: 100%;
+        height: 100%;
+      }
+
+      .slogan {
+        background-color: #ab1e23;
+        text-align: center;
+        padding-bottom: 50px;
+        color: white;
+        font-size: 24px;
+        font-weight: bold;
+      }
+
+      .animate-slide {
+        opacity: 0;
+        transform: translateY(50px);
+        transition: opacity 0.8s ease, transform 0.8s ease;
+      }
+
+      .animate-slide.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .animate-left {
+        opacity: 0;
+        transform: translateX(-50px);
+        transition: opacity 0.8s ease, transform 0.8s ease;
+      }
+
+      .animate-right {
+        opacity: 0;
+        transform: translateX(50px);
+        transition: opacity 0.8s ease, transform 0.8s ease;
+      }
+
+      .animate-left.show,
+      .animate-right.show {
+        opacity: 1;
+        transform: translateX(0);
+      }
+
+      .car-card-container {
+        background-color: #f0f0f0;
+        padding-top: 30px;
+        display: flex;
+        flex-wrap: wrap; /* biar bisa turun ke bawah kalau sempit */
+        gap: 24px;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 40 20px;
+        height: auto; /* pastikan nggak fix height */
+        min-height: 100vh; /* agar div tinggi sesuai konten, minimal 1 layar */
+        box-sizing: border-box;
+      }
+
+      .car-card {
+        background-color: #f9f9f9;
+        border-radius: 16px;
+        padding: 20px;
+        text-align: center;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        width: 250px;
+        transition: transform 0.3s ease;
+        margin: 10px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        will-change: transform;
+        box-sizing: border-box;
+      }
+
+      .car-card:hover {
+        background-color: #d52227;
+        color: white;
+        transform: translateY(-3px);
+        transform: scale(1.05);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      }
+
+      .car-card img {
+        width: 100%;
+        height: auto;
+        margin-bottom: 15px;
+      }
+
+      .car-card h3 {
+        margin: 0 0 10px 0;
+        font-size: 1.5rem;
+      }
+
+      .car-card ul {
+        padding-left: 18px;
+        margin: 0 0 20px 0;
+      }
+
+      .car-card li {
+        margin-bottom: 6px;
+      }
+
+      .more-button {
+        display: none;
+        text-decoration: none;
+        font-weight: bold;
+        background-color: white;
+        color: #d52227;
+        padding: 10px 15px;
+        border-radius: 10px;
+      }
+
+      .car-card:hover .more-button {
+        display: inline-block;
+      }
+
+      .section-title {
+        padding: 40px 20px 10px;
+        text-align: left;
+        position: relative;
+        max-width: 1200px;
+      }
+
+      .section-title h2 {
+        font-size: 32px;
+        font-weight: bold;
+        position: relative;
+        display: inline-block;
+      }
+
+      .section-title h2::before {
+        content: "";
+        position: absolute;
+        top: -15px;
+        left: 0;
+        width: 60px;
+        height: 4px;
+        background-color: #ab1e23;
+        border-radius: 2px;
+      }
+
+      .section-title .black {
+        color: #222;
+      }
+
+      .section-title .red {
+        color: #ab1e23;
+      }
+
+      .variant {
+        font-size: 20px;
+        font-weight: 700;
+        margin: 8px 0;
+        color: #000;
+      }
+
+      .car-name {
+        font-size: 16px;
+        color: #333;
+        margin-bottom: 5px;
+      }
+
+      .car-price {
+        font-size: 16px;
+        font-weight: bold;
+        color: #e63946;
+      }
+
+      .car-card:hover .car-price {
+        color: white;
+      }
+
+      @media (max-width: 768px) {
+        .nav ul {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .performance-section {
+          flex-direction: column;
+          padding: 20px 10px;
+        }
+
+        .slogan {
+          font-size: 18px;
+        }
+
+        .header {
+          flex-direction: column;
+          gap: 10px;
+        }
+
+        .container {
+          padding: 0 10px;
+        }
+
+        .performance-section {
+          padding: 20px 10px;
+        }
+
+        .gallery {
+          padding: 30px 10px 10px;
+        }
+
+        .banner {
+          min-height: 250px;
+        }
+      }
+
+      .wa-Link {
+        text-decoration: none;
+        color: #000;
+        transition: color 0.3s ease;
+      }
+
+      .wa-link:hover {
+        color: #fff; /* warna jadi putih saat hover */
+      }
+
+      /* Modal Background */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 999;
+        padding-top: 80px;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+
+      /* Modal Content Box */
+      .modal-content {
+        background-color: #fff;
+        margin: auto;
+        padding: 20px;
+        border-radius: 10px;
+        width: 90%;
+        max-width: 400px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        animation: fadeIn 0.3s;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Close Button */
+      .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      .close:hover {
+        color: #000;
+      }
+
+      .price-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+      }
+
+      .price-table th,
+      .price-table td {
+        border: 1px solid #ccc;
+        padding: 10px;
+        text-align: left;
+      }
+
+      .price-table th {
+        background-color: #f5f5f5;
+        font-weight: bold;
+      }
+
+      .floating-buttons {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1000;
+      }
+
+      .floating-buttons a {
+        display: flex;
+        align-items: center;
+        background-color: white;
+        padding: 8px 12px;
+        border-radius: 30px;
+        text-decoration: none;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        color: #25d366;
+        font-weight: bold;
+      }
+
+      .floating-buttons a img {
+        width: 20px;
+        margin-right: 10px;
+      }
+
+      .floating-buttons a.whatsapp {
+        border: 1px solid #25d366;
+      }
+
+
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <div class="logo">
+        <img
+          src="source_photo/cropped-daihatsu-makassar-logo-2.png.png"
+          alt="Logo"
+        />
+      </div>
+      <nav class="nav">
+        <ul>
+          <li>
+            <a
+              href="javascript:void(0)"
+              onclick="toggleDropdown('produkDropdown')"
+              class="has-dropdown"
+              >Produk</a
+            >
+            <div class="dropdown" id="produkDropdown">
+              <a href="#">New Ayla</a>
+              <a href="#">Luxio .</a>
+              <a href="#">Rocky .</a>
+              <a href="#">Granmax Blind Van</a>
+              <a href="#">Granmax Minibus</a>
+              <a href="#">All new Xenia</a>
+              <a href="#">All new Terios</a>
+              <a href="#">Sigra</a>
+              <a href="#">Granmax Pickup</a>
+              <a href="#">Sirion</a>
+            </div>
+          </li>
+          <!-- Layanan -->
+          <li>
+            <a
+              href="javascript:void(0)"
+              onclick="toggleDropdown('layananDropdown')"
+              class="has-dropdown"
+              >Layanan</a
+            >
+            <div class="dropdown" id="layananDropdown">
+              <a href="#">Katalog Mobil</a>
+              <a href="#">Harga</a>
+            </div>
+          </li>
+          <li>
+            <a
+              href="https://wa.me/6285158449524?text=Halo%2C%20saya%20tertarik%20dengan%20simulasi%20kredit.%20Boleh%20dibantu%3F"
+              target="_blank"
+              style="text-decoration: none; color: #000"
+              class="wa-Link"
+            >
+              Simulasi kredit
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <div class="banner"></div>
+    <div class="section-title">
+      <h2><span class="black">Daftar</span> <span class="red">Produk</span></h2>
+    </div>
+
+    <div class="car-card-container">
+      <div class="car-card animate-left">
+        <img
+          src="source_photo/1.0X_ADS-removebg-preview.png"
+          alt="New Ayla"
+        />
+        <p class="variant"><b>New Ayla</b></p>
+        <p class="car-name">Harga mulai</p>
+        <p class="car-price">Rp 162.150.000</p>
+        <button class="more-button" onclick="openModal('modal-ayla')">
+          Selengkapnya
+        </button>
+      </div>
+
+      <div id="modal-ayla" class="modal">
+        <div class="modal-content">
+          <span class="close" onclick="closeModal('modal-ayla')">&times;</span>
+          <h2>Daihatsu New Ayla - Tipe & Harga</h2>
+          <table class="price-table">
+            <thead>
+              <tr>
+                <th>Varian</th>
+                <th>MT</th>
+                <th>CVT</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1.0 M</td>
+                <td>Rp 162.150.000</td>
+                <td>-</td>
+              </tr>
+              <tr>
+                <td>1.0 X</td>
+                <td>Rp 175.050.000</td>
+                <td>Rp 195.050.000</td>
+              </tr>
+              <tr>
+                <td>1.0 X ADS</td>
+                <td>Rp 180.950.000</td>
+                <td>Rp 200.950.000</td>
+              </tr>
+              <tr>
+                <td>1.2 R</td>
+                <td>Rp 187.150.000</td>
+                <td>Rp 207.150.000</td>
+              </tr>
+              <tr>
+                <td>1.2 R ADS</td>
+                <td>Rp 193.050.000</td>
+                <td>Rp 213.050.000</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="car-card animate-left">
+        <img
+          src="source_photo/403b0a_215d6e8b5b32439fad1aa93471c5aea2~mv2.png"
+          alt="Sigra"
+        />
+        <p class="variant"><b>Sigra</b></p>
+        <p class="car-name">Harga Mulai</p>
+        <p class="car-price">Rp 166.900.000</p>
+        <button class="more-button" onclick="openModal('modal-sigra')">
+          Selengkapnya
+        </button>
+      </div>
+
+      <div id="modal-sigra" class="modal">
+        <div class="modal-content">
+          <span class="close" onclick="closeModal('modal-sigra')">&times;</span>
+          <h2>Daihatsu Sigra - Tipe & Harga</h2>
+          <table class="price-table">
+            <thead>
+              <tr>
+                <th>Varian</th>
+                <th>MT</th>
+                <th>AT</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1.0 D MC</td>
+                <td>Rp 166.900.000</td>
+                <td>-</td>
+              </tr>
+              <tr>
+                <td>1.0 M MC</td>
+                <td>Rp 179.400.000</td>
+                <td>-</td>
+              </tr>
+              <tr>
+                <td>1.2 X MC</td>
+                <td>Rp 183.350.000</td>
+                <td>Rp 196.750.000</td>
+              </tr>
+              <tr>
+                <td>1.2 R MC</td>
+                <td>Rp 190.150.000</td>
+                <td>Rp 205.150.000</td>
+              </tr>
+              <tr>
+                <td>1.2 R DLX MC</td>
+                <td>Rp 193.950.000</td>
+                <td>Rp 208.950.000</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="car-card animate-left">
+        <img
+          src="source_photo/PRODUK-GRANMAX-PICKUP-removebg-preview.png"
+          alt="Grandmax Pickup"
+        />
+        <p class="variant"><b>Granmax Pickup</b></p>
+        <p class="car-name">Harga Mulai</p>
+        <p class="car-price">Rp 188.150.000</p>
+        <button class="more-button" onclick="openModal('modal-pickup')">
+          Selengkapnya
+        </button>
+      </div>
+
+      <div id="modal-pickup" class="modal">
+        <div class="modal-content">
+          <span class="close" onclick="closeModal('modal-pickup')"
+            >&times;</span
+          >
+          <h2>Daihatsu Granmax Pick Up - Tipe & Harga</h2>
+          <table class="price-table">
+            <thead>
+              <tr>
+                <th>Varian</th>
+                <th>MT</th>
+                <th>BOX GL ALM</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1.3 STD / 3W</td>
+                <td>Rp 188.150.000</td>
+                <td>Rp 210.550.000</td>
+              </tr>
+              <tr>
+                <td>1.5 STD / 3W MC</td>
+                <td>Rp 195.950.000</td>
+                <td>Rp 218.350.000</td>
+              </tr>
+              <tr>
+                <td>AC PS 1.5 FH MC</td>
+                <td>Rp 202.950.000</td>
+                <td>Rp 225.350.000</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="car-card animate-left">
+        <img
+          src="source_photo/403b0a_f6bf03a3e11e4837becb18f3d34b586b~mv2.png"
+          alt="New Xenia"
+        />
+        <p class="variant"><b>All new Xenia</b></p>
+        <p class="car-name">Harga Mulai</p>
+        <p class="car-price">Rp 252.950.000</p>
+        <button class="more-button" onclick="openModal('modal-xenia')">
+          Selengkapnya
+        </button>
+      </div>
+
+      <div id="modal-xenia" class="modal">
+        <div class="modal-content">
+          <span class="close" onclick="closeModal('modal-xenia')">&times;</span>
+          <h2>Daihatsu All New Xenia - Tipe & Harga</h2>
+          <table class="price-table">
+            <thead>
+              <tr>
+                <th>Varian</th>
+                <th>MT</th>
+                <th>CVT</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1.3 X</td>
+                <td>Rp 252.950.000</td>
+                <td>Rp 270.350.000</td>
+              </tr>
+              <tr>
+                <td>1.3 R</td>
+                <td>Rp 263.950.000</td>
+                <td>Rp 281.450.000</td>
+              </tr>
+              <tr>
+                <td>1.3 R ADS</td>
+                <td>Rp 273.050.000</td>
+                <td>Rp 290.450.000</td>
+              </tr>
+              <tr>
+                <td>1.5 R</td>
+                <td>Rp 279.150.000</td>
+                <td>Rp 293.550.000</td>
+              </tr>
+              <tr>
+                <td>1.5 R ADS</td>
+                <td>Rp 288.150.000</td>
+                <td>Rp 302.650.000</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="car-card animate-left">
+        <img
+          src="source_photo/360_Daihatsu_Rocky_Black_10_0beb150791.png"
+          alt="Rocky"
+        />
+        <p class="variant"><b>Rocky</b></p>
+        <p class="car-name">Harga Mulai</p>
+        <p class="car-price">Rp 226.900.000</p>
+        <button class="more-button" onclick="openModal('modal-rocky')">
+          Selengkapnya
+        </button>
+      </div>
+
+      <div id="modal-rocky" class="modal">
+        <div class="modal-content">
+          <span class="close" onclick="closeModal('modal-rocky')">&times;</span>
+          <h2>Daihatsu Rocky - Tipe & Harga</h2>
+          <table class="price-table">
+            <thead>
+              <tr>
+                <th>Varian</th>
+                <th>MT</th>
+                <th>CVT</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1.2 X</td>
+                <td>Rp 249.000.000</td>
+                <td>Rp 266.900.000</td>
+              </tr>
+              <tr>
+                <td>1.2 X ADS</td>
+                <td>Rp 257.100.000</td>
+                <td>Rp 275.000.000</td>
+              </tr>
+              <tr>
+                <td>1.0 R</td>
+                <td>Rp 271.500.000</td>
+                <td>Rp 286.500.000</td>
+              </tr>
+              <tr>
+                <td>1.0 R SC</td>
+                <td>Rp 273.000.000</td>
+                <td>Rp 288.000.000</td>
+              </tr>
+              <tr>
+                <td>1.0 R TWO TONE</td>
+                <td>Rp 274.000.000</td>
+                <td>Rp 289.000.000</td>
+              </tr>
+              <tr>
+                <td>1.0 R TWO TONE SC</td>
+                <td>Rp 275.000.000</td>
+                <td>Rp 290.000.000</td>
+              </tr>
+              <tr>
+                <td>1.0 R ADS</td>
+                <td>Rp 279.600.000</td>
+                <td>Rp 294.600.000</td>
+              </tr>
+              <tr>
+                <td>1.0 R ADS SC</td>
+                <td>Rp 281.100.000</td>
+                <td>Rp 296.100.000</td>
+              </tr>
+              <tr>
+                <td>1.0 R ADS TWO TONE</td>
+                <td>Rp 282.100.000</td>
+                <td>Rp 297.100.000</td>
+              </tr>
+              <tr>
+                <td>1.0 R ADS TWO TONE SC</td>
+                <td>Rp 283.100.000</td>
+                <td>Rp 298.100.000</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="car-card animate-left">
+        <img
+          src="source_photo/403b0a_4d1eca86f5104a65a9b6c03da256a9aa~mv2.png"
+          alt="New Terios"
+        />
+        <p class="variant"><b>All new Terios</b></p>
+        <p class="car-name">Harga Mulai</p>
+        <p class="car-price">Rp 278.250.000</p>
+        <button class="more-button" onclick="openModal('modal-terios')">
+          Selengkapnya
+        </button>
+      </div>
+
+      <div id="modal-terios" class="modal">
+        <div class="modal-content">
+          <span class="close" onclick="closeModal('modal-terios')"
+            >&times;</span
+          >
+          <h2>Daihatsu All New Terios - Tipe & Harga</h2>
+          <table class="price-table">
+            <thead>
+              <tr>
+                <th>Varian</th>
+                <th>MT</th>
+                <th>AT</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1.5 X MC</td>
+                <td>Rp 278.250.000</td>
+                <td>Rp 288.550.000</td>
+              </tr>
+              <tr>
+                <td>1.5 X ADS MC</td>
+                <td>Rp 290.200.000</td>
+                <td>Rp 300.500.000</td>
+              </tr>
+              <tr>
+                <td>1.5 R MC</td>
+                <td>Rp 302.850.000</td>
+                <td>Rp 315.350.000</td>
+              </tr>
+              <tr>
+                <td>1.5 R ADS MC</td>
+                <td>Rp 312.850.000</td>
+                <td>Rp 325.350.000</td>
+              </tr>
+              <tr>
+                <td>1.5 R CUSTOM MC</td>
+                <td>Rp 325.650.000</td>
+                <td>Rp 338.150.000</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="car-card animate-left">
+        <img
+          src="source_photo/403b0a_5aa8083ebba644e4a3960130053ec873~mv2.png"
+          alt="Grandmax Minibus"
+        />
+        <p class="variant"><b>Granmax Minibus</b></p>
+        <p class="car-name">Harga Mulai</p>
+        <p class="car-price">Rp 226.350.000</p>
+        <button class="more-button" onclick="openModal('modal-minibus')">
+          Selengkapnya
+        </button>
+      </div>
+
+      <div id="modal-minibus" class="modal">
+        <div class="modal-content">
+          <span class="close" onclick="closeModal('modal-minibus')"
+            >&times;</span
+          >
+          <h2>Granmax Minibus - Tipe & Harga</h2>
+          <table class="price-table">
+            <thead>
+              <tr>
+                <th>Varian</th>
+                <th>MT</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1.3 D</td>
+                <td>Rp 226.350.000</td>
+              </tr>
+              <tr>
+                <td>1.3 D FF</td>
+                <td>Rp 233.050.000</td>
+              </tr>
+              <tr>
+                <td>1.5 D PS MC</td>
+                <td>Rp 246.950.000</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="car-card animate-left">
+        <img
+          src="source_photo/1744454486113.png"
+          alt="Grandmax Blind Van"
+        />
+        <p class="variant"><b>Granmax Blind Van</b></p>
+        <p class="car-name">Harga Mulai</p>
+        <p class="car-price">Rp 194.150.000</p>
+        <button class="more-button" onclick="openModal('modal-blindvan')">
+          Selengkapnya
+        </button>
+      </div>
+
+      <div id="modal-blindvan" class="modal">
+        <div class="modal-content">
+          <span class="close" onclick="closeModal('modal-blindvan')"
+            >&times;</span
+          >
+          <h2>Granmax Blind Van - Tipe & Harga</h2>
+          <table class="price-table">
+            <thead>
+              <tr>
+                <th>Varian</th>
+                <th>MT</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1.3 STD</td>
+                <td>Rp 194.150.000</td>
+              </tr>
+              <tr>
+                <td>1.3 AC</td>
+                <td>Rp 198.250.000</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="car-card animate-left">
+        <img
+          src="source_photo/1744453849452.png"
+          alt="Luxio"
+        />
+        <p class="variant"><b>Luxio</b></p>
+        <p class="car-name">Harga mulai</p>
+        <p class="car-price">Rp 243.150.000</p>
+        <button class="more-button" onclick="openModal('modal-luxio')">
+          Selengkapnya
+        </button>
+      </div>
+
+      <div id="modal-luxio" class="modal">
+        <div class="modal-content">
+          <span class="close" onclick="closeModal('modal-luxio')">&times;</span>
+          <h2>Daihatsu Luxio - Tipe & Harga</h2>
+          <table class="price-table">
+            <thead>
+              <tr>
+                <th>Varian</th>
+                <th>MT</th>
+                <th>AT</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1.5 D</td>
+                <td>Rp 251.150.000</td>
+                <td>-</td>
+              </tr>
+              <tr>
+                <td>1.5 X</td>
+                <td>Rp 270.150.000</td>
+                <td>Rp 283.150.000</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="car-card animate-left">
+        <img
+          src="source_photo/403b0a_fc787f4eadd34806a533983ad108032a~mv2.png"
+          alt="Sirion"
+        />
+        <p class="variant"><b>Sirion</b></p>
+        <p class="car-name">Harga Mulai</p>
+        <p class="car-price">Rp 253.450.000</p>
+        <button class="more-button" onclick="openModal('modal-ayla')">
+          Selengkapnya
+        </button>
+      </div>
+    </div>
+
+    <div id="modal-sirion" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal('modal-sirion')">&times;</span>
+        <h2>Daihatsu Sirion - Tipe & Harga</h2>
+        <table class="price-table">
+          <thead>
+            <tr>
+              <th>Varian</th>
+              <th>CVT</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1.3 X</td>
+              <td>Rp 253.450.000</td>
+            </tr>
+            <tr>
+              <td>1.3 R</td>
+              <td>Rp 262.650.000</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Section Maps -->
+    <div style="padding: 40px 20px; text-align: center">
+      <h2>Lokasi Kami</h2>
+      <div
+        style="
+          max-width: 100%;
+          overflow: hidden;
+          border-radius: 16px;
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+          margin-top: 20px;
+        "
+      >
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d376.76715075461635!2d110.78415761884756!3d-7.549129457034199!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a159adeb3472f%3A0x25dfa6658db01628!2sAstra%20Daihatsu%20Solo%20Adi%20Sucipto!5e1!3m2!1sen!2sid!4v1744364816859!5m2!1sen!2sid"
+          width="600"
+          height="450"
+          style="border: 0"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+        >
+          width="100%" height="450" style="border: 0" allowfullscreen=""
+          loading="lazy" referrerpolicy="no-referrer-when-downgrade" ></iframe
+        >
+      </div>
+    </div>
+
+    <!-- Section Media Sosial -->
+    <!-- Section Media Sosial dengan Card -->
+    <div
+      style="padding: 40px 20px; text-align: center; background-color: #f9f9f9"
+    >
+      <h2 style="margin-bottom: 30px">Ikuti Kami di Media Sosial</h2>
+      <div
+        style="
+          display: flex;
+          justify-content: center;
+          gap: 20px;
+          flex-wrap: wrap;
+        "
+      >
+        <!-- Instagram Card -->
+        <div
+          style="
+            width: 180px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+          "
+        >
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"
+            alt="Instagram"
+            width="40"
+            height="40"
+            style="margin-bottom: 10px"
+          />
+          <h4 style="margin: 10px 0">Instagram</h4>
+          <a
+            href="https://www.instagram.com/daihatsu.solo_zefa?igsh=NzQxdWlyM2dyMm5t"
+            target="_blank"
+            style="color: #e1306c; text-decoration: none"
+            >@daihatsu.solo_zefa</a
+          >
+        </div>
+
+        <!-- Facebook Card -->
+        <div
+          style="
+            width: 180px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+          "
+        >
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/733/733547.png"
+            alt="Facebook"
+            width="40"
+            height="40"
+            style="margin-bottom: 10px"
+          />
+          <h4 style="margin: 10px 0">Facebook</h4>
+          <a
+            href="https://www.facebook.com/share/1BSz8apqdc/"
+            target="_blank"
+            style="color: #1877f2; text-decoration: none"
+            >Daihatsu Astra Solo</a
+          >
+        </div>
+
+        <!-- TikTok Card -->
+        <div
+          style="
+            width: 180px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+          "
+        >
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png"
+            alt="TikTok"
+            width="40"
+            height="40"
+            style="margin-bottom: 10px"
+          />
+          <h4 style="margin: 10px 0">TikTok</h4>
+          <a
+            href="https://www.tiktok.com/@zefa_daihatsu?_t=ZS-8unwEcSy7YF&_r=1"
+            target="_blank"
+            style="color: #000000; text-decoration: none"
+            >@zefa_daihatsu</a
+          >
+        </div>
+
+        <!-- WhatsApp Card -->
+        <div
+          style="
+            width: 180px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+          "
+        >
+          <img
+            src="source_photo/whatsapp.png"
+            alt="WhatsApp"
+            width="40"
+            height="40"
+            style="margin-bottom: 10px"
+          />
+          <h4 style="margin: 10px 0">WhatsApp</h4>
+          <a
+            href="https://wa.me/6285158449524?text=Halo!!%2C%20Ka%20Zefa%20mau%20tanya%20harga%20terbaru%20dan%20promo%20Daihatsu%20Solo.%3F"
+            target="_blank"
+            style="color: #25D366; text-decoration: none"
+            >085158449524</a
+          >
+        </div>
+        <div class="floating-buttons">
+          <a href="https://wa.me/6285158449524?text=Halo!!%2C%20Ka%20Zefa%20mau%20tanya%20harga%20terbaru%20dan%20promo%20Daihatsu%20Solo.%3F" class="whatsapp">
+            <img src="source_photo/whatsapp.png" alt="WhatsApp" />
+            WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Galeri Mobil -->
+    <div class="gallery">
+      <div class="card">
+        <div class="image-wrapper">
+          <img
+            src="source_photo/097d3ad2-c27e-42f3-aa6f-3b2bfe70bf1c.png"
+            alt="Mobil 1"
+            class="car"
+          />
+        </div>
+      </div>
+      <div class="card">
+        <div class="image-wrapper">
+          <img
+            src="source_photo/Daihatsu-Sigra.avif"
+            alt="Mobil 2"
+            class="car"
+          />
+        </div>
+      </div>
+      <div class="card">
+        <div class="image-wrapper">
+          <img
+            src="source_photo/Tipe-Daihatsu-Terios-Terbaru.webp"
+            alt="Mobil 3"
+            class="car"
+          />
+        </div>
+      </div>
+      <div class="card">
+        <div class="image-wrapper">
+          <img
+            src="source_photo/1723461378720-631490095.webp"
+            alt="Mobil 4"
+            class="car"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="slogan">
+      <h2>Setia menemani Sahabat Keluarga dari <br />generasi ke generasi</h2>
+    </div>
+
+    <footer
+      style="background: #222; color: #fff; padding: 20px; text-align: center"
+    >
+      <p>© 2025 Daihatsu Solo. All rights reserved.</p>
+    </footer>
+
+    <script>
+      function openModal(id) {
+        document.getElementById(id).style.display = "block";
+      }
+
+      function closeModal(id) {
+        document.getElementById(id).style.display = "none";
+      }
+
+      // Close modal when click outside
+      window.onclick = function (event) {
+        const modals = document.querySelectorAll(".modal");
+        modals.forEach((modal) => {
+          if (event.target == modal) {
+            modal.style.display = "none";
+          }
+        });
+      };
+
+      const animatedElements = document.querySelectorAll(
+        ".animate-slide, .animate-left, .animate-right"
+      );
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("show");
+            } else {
+              entry.target.classList.remove("show");
+            }
+          });
+        },
+        {
+          threshold: 0.2,
+        }
+      );
+
+      animatedElements.forEach((el) => observer.observe(el));
+
+      function toggleDropdown(id) {
+        const dropdowns = document.querySelectorAll(".dropdown");
+        dropdowns.forEach((dropdown) => {
+          if (dropdown.id !== id) {
+            dropdown.classList.remove("show");
+          }
+        });
+
+        const target = document.getElementById(id);
+        target.classList.toggle("show");
+      }
+
+      document.addEventListener("click", function (e) {
+        const isDropdownClick = e.target.closest("li");
+        if (!isDropdownClick) {
+          document
+            .querySelectorAll(".dropdown")
+            .forEach((el) => el.classList.remove("show"));
+        }
+      });
+
+      function toggleDropdown(id) {
+        // Tutup semua dropdown lebih dulu
+        const dropdowns = document.querySelectorAll(".dropdown");
+        dropdowns.forEach((dropdown) => {
+          if (dropdown.id !== id) {
+            dropdown.classList.remove("show");
+          }
+        });
+
+        // Toggle dropdown yang diklik
+        const target = document.getElementById(id);
+        target.classList.toggle("show");
+      }
+
+      // Tutup dropdown kalau klik di luar
+      document.addEventListener("click", function (e) {
+        const isDropdownClick = e.target.closest("li");
+        if (!isDropdownClick) {
+          document
+            .querySelectorAll(".dropdown")
+            .forEach((el) => el.classList.remove("show"));
+        }
+      });
+    </script>
+  </body>
+</html>
